@@ -135,6 +135,15 @@ def draft_frontmatter(draft_path: Path) -> tuple[dict, str]:
     dv = _load_hyphen("dv_adopt", "draft-validator.py")
     meta, body, err = dv.parse_frontmatter(read_text(draft_path))
     if err:
+        # 3F CANON_SYNC: formal chapter files carry no frontmatter.
+        # Treat the whole file as author-confirmed body (read-only here).
+        text = read_text(draft_path)
+        if text.strip():
+            stem = draft_path.stem
+            return {"request": f"canon sync {stem}", "request_type": "SYNC",
+                    "target": stem, "status": "CONFIRMED",
+                    "proposed_used": [], "inferred_used": [],
+                    "entities_used": [], "source_chapters": []}, text
         raise AdoptionError(f"draft frontmatter invalid: {err}")
     return meta, body
 

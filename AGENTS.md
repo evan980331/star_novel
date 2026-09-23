@@ -35,3 +35,28 @@
 
 - 不得對 Penana 進行登入破解、CAPTCHA / Cloudflare bypass、大量請求或暴力抓取。
 - 不把完整小說正文塞進本檔。
+
+## Novel Writing Mode
+
+Trigger:
+「寫作開始」
+
+When triggered:
+- use writing-procedure.md
+- read Canon before writing
+- generate multiple drafts
+- validate every draft
+- run consistency checks
+- never modify Canon during drafting
+- never modify formal chapters automatically
+
+Finalization Trigger:
+「正式章節已確認，請存檔」
+
+When triggered:
+- verify chapter exists in novel/chapters/
+- treat it as author-confirmed
+- run Canon Sync
+- block unresolved conflicts
+- preserve provenance
+- create adoption log

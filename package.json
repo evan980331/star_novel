@@ -1,0 +1,12 @@
+{
+  "name": "star-novel-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Localhost writing studio for the star_novel project (3F). No runtime dependencies.",
+  "scripts": {
+    "start": "node web/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

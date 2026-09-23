@@ -126,3 +126,33 @@ python scripts/audit_canon.py --review
 規則見 `adoption-rules.md`：涉及未解決 Conflict → BLOCKED（C-004 永不靜默解決）；
 `[PROPOSED]`／`[INFERRED]`／`[AI IDEA]` 需作者明確批准才可進 Canon；
 `--approve-all` 僅在無 conflict、無未確認來源、無 ERROR、全為安全 ADD 時放行。
+
+## 3F Agent-driven Writing Workflow
+## 3F Localhost UI
+
+作者只用瀏覽器：`http://localhost:3000`（`PORT` 可改），程式在 `web/`。
+UI＝章節面板＋Draft 面板（含 Validator／Consistency 結果）＋Agent 對話＋狀態。
+
+```bash
+node web/server.js
+python novel/editor/writer.py --request "續寫第60章" --provider mock  # CLI 同等
+```
+
+寫作暗號：「寫作開始」（另接受 開始寫／開始寫小說／開始新章／
+我要寫第60章／開始創作；一般討論不誤觸發）。
+正式章節暗號：「正式章節已確認，請存檔」（另接受 這章確定了，請存檔／
+第60章已確定，請更新設定／正式版已上傳，請同步 Canon）。
+
+Draft 流程：暗號 → Context（重用 3B）→ Writer v1/v2/v3（重用 3C，
+存 `novel/drafts/chapter-060/`，永不覆蓋）→ Validator＋Consistency
+（重用 3C／3D，報告同目錄）→ 聊天摘要回報 → 作者選版／指示修改
+（產 v4…）→ 作者自行放入 `novel/chapters/` 才算正式章節。
+
+Canon 權限：起草期 READ 允許、WRITE 禁止。
+Canon Sync：驗證章節存在 → 3E `--generate` → Change Set 審核 →
+批准 → `--apply`（版本鎖＋原子寫入＋log）；未解決 Conflict（含 C-004）
+一律 BLOCKED 並顯示「需要作者決定」。
+
+安全規則：API 只暴露預定義 workflow（無任意命令執行）；
+路徑白名單＋traversal 阻擋；不回傳 secrets／API keys／環境變數。
+完整流程見 `writing-procedure.md`。

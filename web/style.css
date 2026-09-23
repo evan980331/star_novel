@@ -1,0 +1,83 @@
+:root {
+  --bg: #ffffff; --fg: #1c1c1e; --muted: #6b7280;
+  --panel: #f4f4f5; --border: #d4d4d8; --accent: #2563eb;
+  --badge-bg: #e4e4e7; --code-bg: #f4f4f5;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --bg: #18181b; --fg: #e4e4e7; --muted: #a1a1aa;
+    --panel: #27272a; --border: #3f3f46; --accent: #60a5fa;
+    --badge-bg: #3f3f46; --code-bg: #27272a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #18181b; --fg: #e4e4e7; --muted: #a1a1aa;
+  --panel: #27272a; --border: #3f3f46; --accent: #60a5fa;
+  --badge-bg: #3f3f46; --code-bg: #27272a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  line-height: 1.6;
+}
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.5rem 1rem; border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.topbar h1 { font-size: 1.1rem; margin: 0; }
+.top-right { display: flex; gap: 0.5rem; align-items: center; }
+.badge {
+  background: var(--badge-bg); border-radius: 999px;
+  padding: 0.15rem 0.7rem; font-size: 0.85rem;
+}
+button {
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 6px; padding: 0.4rem 0.8rem; cursor: pointer;
+}
+#themeBtn { background: var(--badge-bg); color: var(--fg); }
+.layout { display: flex; min-height: calc(100vh - 53px); }
+.side {
+  width: 300px; flex-shrink: 0; border-right: 1px solid var(--border);
+  padding: 0.75rem; overflow-y: auto; background: var(--panel);
+}
+.side h2 { font-size: 0.95rem; margin: 0.75rem 0 0.4rem; }
+.nav-list { list-style: none; margin: 0; padding: 0; }
+.nav-list li {
+  padding: 0.25rem 0.4rem; border-radius: 4px; font-size: 0.9rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.latest { color: var(--accent); font-weight: bold; }
+.muted { color: var(--muted); font-size: 0.85rem; }
+.draft-ch { margin: 0.3rem 0; font-size: 0.9rem; }
+.draft-ch > summary { cursor: pointer; font-weight: bold; }
+.ver-row { display: flex; gap: 0.4rem; align-items: center; margin: 0.2rem 0 0.2rem 1rem; }
+.ver-row button { padding: 0.15rem 0.5rem; font-size: 0.8rem; }
+.pill { font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; padding: 0 0.35rem; }
+.pill.pass { color: #16a34a; } .pill.warn { color: #d97706; } .pill.err { color: #dc2626; }
+.chat { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.chat-log { flex: 1; overflow-y: auto; padding: 1rem; }
+.msg { margin: 0.6rem 0; max-width: 46rem; }
+.msg.user { margin-left: auto; background: var(--panel); border-radius: 8px; padding: 0.5rem 0.75rem; }
+.msg.agent { border-left: 3px solid var(--accent); padding-left: 0.75rem; }
+.msg .who { font-size: 0.8rem; color: var(--muted); }
+.chat-input { display: flex; gap: 0.5rem; padding: 0.75rem; border-top: 1px solid var(--border); }
+.chat-input input { flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; justify-content: center; align-items: center; padding: 1rem; }
+.overlay[hidden] { display: none; }
+.viewer { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; width: min(60rem, 100%); max-height: 90vh; display: flex; flex-direction: column; }
+.viewer-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); }
+.viewer-tabs { display: flex; gap: 0.4rem; padding: 0.5rem 1rem 0; }
+.viewer-tabs button { background: var(--badge-bg); color: var(--fg); }
+.viewer-tabs button.active { background: var(--accent); color: #fff; }
+.viewer .md { padding: 1rem 1.25rem; overflow-y: auto; }
+.md h1, .md h2, .md h3 { margin: 0.8em 0 0.4em; }
+.md pre { background: var(--code-bg); padding: 0.6rem; overflow-x: auto; border-radius: 6px; }
+.md code { background: var(--code-bg); padding: 0 0.3em; border-radius: 4px; }
+.md blockquote { border-left: 3px solid var(--border); margin: 0.5em 0; padding-left: 0.75em; color: var(--muted); }
+.md hr { border: none; border-top: 1px solid var(--border); margin: 1em 0; }
+@media (max-width: 800px) {
+  .layout { flex-direction: column; }
+  .side { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: 40vh; }
+}

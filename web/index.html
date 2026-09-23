@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>星星小說 Agent 工作台</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>星星小說 Agent</h1>
+  <div class="top-right">
+    <span id="statusBadge" class="badge">Idle</span>
+    <button id="themeBtn" type="button" title="深色／淺色切換">◐</button>
+  </div>
+</header>
+<main class="layout">
+  <aside class="side" id="sidePanel" aria-label="章節與草稿">
+    <section>
+      <h2>正式章節</h2>
+      <ul id="chapterList" class="nav-list"><li class="muted">載入中……</li></ul>
+    </section>
+    <section>
+      <h2>Draft</h2>
+      <div id="draftTree"><p class="muted">尚無草稿，對話輸入「寫作開始」。</p></div>
+    </section>
+  </aside>
+  <section class="chat" aria-label="Agent 對話">
+    <div id="chatLog" class="chat-log" aria-live="polite"></div>
+    <form id="chatForm" class="chat-input" autocomplete="off">
+      <input id="chatInput" type="text" maxlength="2000" placeholder="輸入需求……（寫作開始／我選 v2／正式章節已確認，請存檔）" aria-label="輸入需求">
+      <button type="submit">送出</button>
+    </form>
+  </section>
+</main>
+<div id="viewerOverlay" class="overlay" hidden>
+  <div class="viewer" role="dialog" aria-modal="true" aria-label="草稿檢視">
+    <div class="viewer-bar">
+      <strong id="viewerTitle">Draft</strong>
+      <div>
+        <button id="viewerSelect" type="button">選為目前版本</button>
+        <button id="viewerClose" type="button">關閉</button>
+      </div>
+    </div>
+    <div class="viewer-tabs">
+      <button type="button" data-tab="content" class="active">正文</button>
+      <button type="button" data-tab="validation">Validator</button>
+      <button type="button" data-tab="consistency">Consistency</button>
+    </div>
+    <article id="viewerBody" class="md"></article>
+  </div>
+</div>
+<script src="/app.js"></script>
+</body>
+</html>
