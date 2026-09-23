@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CanonAdoption",
+  "description": "3E Canon Adoption: Change Set Generator + Explicit Approval Gate。所有變更預設 PENDING；只有 APPROVED 且通過 --apply 前檢查的項目才可寫入 Canon；Canon version lock + atomic apply + adoption log。",
+  "type": "object",
+  "required": ["schema_version", "adoption_id", "draft", "draft_sha256", "canon_version", "created_at", "status", "changes", "conflicts", "summary"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "adoption_id": { "type": "string" },
+    "draft": { "type": "string" },
+    "draft_sha256": { "type": "string" },
+    "canon_version": { "type": "string" },
+    "created_at": { "type": "string" },
+    "status": { "type": "string", "enum": ["PENDING", "PARTIAL", "APPLIED"] },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "action", "target", "field", "old_value", "new_value", "source", "evidence", "confidence", "approval", "source_status"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["CHARACTER", "ABILITY", "WEAPON", "FACTION", "LOCATION", "TERMINOLOGY", "TIMELINE", "RELATIONSHIP", "PLOT", "FORESHADOWING"] },
+          "action": { "type": "string", "enum": ["ADD", "UPDATE", "DEPRECATE"] },
+          "target": { "type": "string" },
+          "field": { "type": "string" },
+          "old_value": { "type": ["string", "null"] },
+          "new_value": { "type": "string" },
+          "source": { "type": "string" },
+          "evidence": { "type": "string" },
+          "confidence": { "type": "string" },
+          "approval": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED", "BLOCKED"] },
+          "source_status": { "type": "string", "enum": ["NEW_SETTING", "PROPOSED", "INFERRED", "AI_IDEA", "CANON"] },
+          "blocked_reason": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["pending", "approved", "rejected", "blocked"],
+      "properties": {
+        "pending": { "type": "integer" },
+        "approved": { "type": "integer" },
+        "rejected": { "type": "integer" },
+        "blocked": { "type": "integer" }
+      }
+    }
+  }
+}

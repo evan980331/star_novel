@@ -104,7 +104,10 @@ def snapshot() -> dict[str, tuple[int, float]]:
 
 def keywords(title: str) -> list[str]:
     parts = [w for w in re.split(r"[／/、，,；;（）()\[\]【】「」『』\"' —–…·]+", title) if w]
-    return [w for w in parts if len(w) >= 2 and not re.fullmatch(r"#?\d+\.?$", w)]
+    return [w for w in parts
+            if len(w) >= 2
+            and not re.fullmatch(r"#?\d+\.?$", w)
+            and not re.fullmatch(r"[A-Z]+", w)]
 
 
 def title_hit(title: str, pid: str, body: str) -> bool:
@@ -602,10 +605,13 @@ class Checker:
         target = str((self.meta.get("target") or ""))
         tm = re.match(r"chapter-(\d+)", target)
         version = str((self.meta.get("draft_id") or ""))
+        try:
+            dpath = self.draft_path.relative_to(ROOT).as_posix()
+        except ValueError:
+            dpath = self.draft_path.as_posix()
         return {
             "schema_version": SCHEMA_VERSION,
-            "draft": {"path": self.draft_path.relative_to(ROOT).as_posix()
-                      if self.draft_path.is_absolute() else self.draft_path.as_posix(),
+            "draft": {"path": dpath,
                       "chapter": tm.group(1) if tm else target,
                       "version": version},
             "canon_version": git_head(),

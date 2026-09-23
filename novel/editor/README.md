@@ -91,3 +91,38 @@ Consistency ERROR = 發現明確或高度可確定的規則違反
 Checker 只能檢查與報告（JSON／Markdown Report），不得修改 Canon、
 正式章節、Draft，不得採用設定、不得解 Conflict。規則見
 `consistency-rules.md`，報告格式見 `consistency-schema.json`。
+
+## 3E Canon Adoption / Author Approval
+
+```text
+Generate ≠ Apply
+Approve ≠ Apply
+只有 --apply 才會正式修改 Canon
+```
+
+```bash
+# 1. Generate：只產生候選變更（全部 PENDING，不動 Canon）
+python novel/editor/canon_adopter.py novel/drafts/chapter-060-v1.md --generate
+
+# 2. Review：閱讀 novel/adoptions/<name>-adoption.md
+
+# 3. Approve / Reject：作者逐項決策
+python novel/editor/canon_adopter.py <adoption.json> --approve A-001 A-003
+python novel/editor/canon_adopter.py <adoption.json> --reject A-002
+
+# 4. Apply：僅 APPROVED 可寫入（版本鎖＋原子寫入＋log）
+python novel/editor/canon_adopter.py <adoption.json> --apply
+
+# 5. Audit：確認結果
+python scripts/audit_canon.py --review
+```
+
+| 檔案 | 用途 |
+|------|------|
+| `canon_adopter.py` | Change Set Generator＋Approval Gate＋Apply |
+| `adoption-schema.json` | Adoption JSON Schema |
+| `adoption-rules.md` | 採用安全規則 |
+
+規則見 `adoption-rules.md`：涉及未解決 Conflict → BLOCKED（C-004 永不靜默解決）；
+`[PROPOSED]`／`[INFERRED]`／`[AI IDEA]` 需作者明確批准才可進 Canon；
+`--approve-all` 僅在無 conflict、無未確認來源、無 ERROR、全為安全 ADD 時放行。
