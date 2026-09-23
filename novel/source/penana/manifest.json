@@ -1,12 +1,22 @@
 {
   "story_id": "216000",
+  "source": "penana",
   "source_url": "https://www.penana.com/story/216000/說好一起當吊車尾-妳神化全開",
-  "download_url": "",
+  "download_url": "https://www.penana.com/loadingfile.php?folder=pdf&story_id=216000&file[0][name]=%E8%AA%AA%E5%A5%BD%E4%B8%80%E8%B5%B7%E7%95%B6%E5%90%8A%E8%BB%8A%E5%B0%BE-%E5%A6%B3%E7%A5%9E%E5%8C%96%E5%85%A8%E9%96%8Bl4vu4B9jCA0.pdf&file[0][start]=0&file[0][end]=59",
   "downloaded_at": "2026-09-23T15:06:40.939821+00:00",
+  "downloaded_start": 0,
+  "downloaded_end": 59,
+  "downloaded_chapter_count": 60,
+  "requested_start": 0,
+  "requested_end": 59,
   "filename": "penana-latest.pdf",
   "file_size": 1538552,
   "sha256": "92778830a1a561513ed61a05773b4f75e8ebdce45494be70c3d188badc3d99d4",
   "page_count": 124,
   "text_length": 111954,
-  "chapter_count": 60
+  "chapter_count": 60,
+  "parser_result": "ok",
+  "pdf_removed": true,
+  "status": "complete",
+  "temp_pdf": "removed"
 }

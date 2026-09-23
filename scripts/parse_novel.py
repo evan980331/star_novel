@@ -24,6 +24,7 @@ CJK_NUM = "零一二三四五六七八九十百"
 EP_HEAD = re.compile(
     r"(?m)^第\s*(\d+)\s*[集篇章話]\b|^第([" + CJK_NUM + r"]+)\s*[集篇章話]"
 )
+CHAPTER_FILE = re.compile(r"^(\d{3})\.md$")
 
 
 def sha256_file(path: Path) -> str:
@@ -58,12 +59,34 @@ def parse_cjk_num(s: str) -> int | None:
     return total
 
 
-def pdf_to_text() -> tuple[str, dict]:
+def scan_chapter_range(chapters_dir: Path | None = None) -> tuple[int, int, int] | None:
+    """Return (start, end, count) from NNN.md files, or None if none exist."""
+    d = chapters_dir or CHAPTERS_DIR
+    if not d.is_dir():
+        return None
+    nums: list[int] = []
+    for p in d.iterdir():
+        if p.is_file():
+            m = CHAPTER_FILE.match(p.name)
+            if m:
+                nums.append(int(m.group(1)))
+    if not nums:
+        return None
+    return min(nums), max(nums), len(nums)
+
+
+def load_config() -> dict:
+    if STORY_META.is_file():
+        return json.loads(STORY_META.read_text(encoding="utf-8"))
+    return {}
+
+
+def pdf_to_text(pdf_path: Path) -> tuple[str, dict]:
     import pymupdf
 
-    if not PDF_PATH.is_file():
-        raise FileNotFoundError(f"missing PDF: {PDF_PATH}")
-    doc = pymupdf.open(str(PDF_PATH))
+    if not pdf_path.is_file():
+        raise FileNotFoundError(f"missing PDF: {pdf_path}")
+    doc = pymupdf.open(str(pdf_path))
     parts: list[str] = []
     for i, page in enumerate(doc, start=1):
         parts.append(f"===== PAGE {i} =====\n{page.get_text()}")
@@ -129,7 +152,6 @@ def split_chapters(text: str) -> list[tuple[int, str, str]]:
     for i, (pos, num, line) in enumerate(unique):
         end = unique[i + 1][0] if i + 1 < len(unique) else len(body)
         chunk = body[pos:end]
-        # strip leading heading line for body? Keep full original including heading.
         chapters.append((num, line, chunk.rstrip() + "\n"))
     return chapters
 
@@ -155,44 +177,132 @@ def save_manifest(man: dict) -> None:
     MANIFEST_PATH.write_text(json.dumps(man, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def build_manifest(
+    *,
+    pdf_hash: str,
+    file_size: int,
+    page_count: int,
+    text_length: int,
+    chapter_count: int,
+    start: int,
+    end: int,
+    cfg: dict,
+    parser_result: str = "ok",
+    pdf_removed: bool = False,
+) -> dict:
+    requested_start = cfg.get("requested_start", start)
+    requested_end = cfg.get("requested_end", end)
+    status = (
+        "complete"
+        if parser_result == "ok"
+        and chapter_count > 0
+        and start <= requested_start
+        and end >= requested_end
+        else "incomplete"
+    )
+    return {
+        "story_id": str(cfg.get("story_id", "216000")),
+        "source": cfg.get("source", "penana"),
+        "source_url": cfg.get("story_url", ""),
+        "download_url": cfg.get("pdf_url", ""),
+        "downloaded_at": datetime.now(timezone.utc).isoformat(),
+        "downloaded_start": start,
+        "downloaded_end": end,
+        "downloaded_chapter_count": chapter_count,
+        "requested_start": requested_start,
+        "requested_end": requested_end,
+        "filename": PDF_PATH.name,
+        "file_size": file_size,
+        "sha256": pdf_hash,
+        "page_count": page_count,
+        "text_length": text_length,
+        "chapter_count": chapter_count,
+        "parser_result": parser_result,
+        "pdf_removed": pdf_removed,
+        "status": status,
+    }
+
+
 def main() -> int:
+    cfg = load_config()
+    scanned = scan_chapter_range()
+
     if not PDF_PATH.is_file():
+        # No temp PDF: allow success if chapters + manifest already complete.
+        man = load_manifest()
+        if (
+            man.get("parser_result") == "ok"
+            and scanned is not None
+            and man.get("downloaded_start") is not None
+        ):
+            print("No changes detected.")
+            print(
+                f"Existing chapters: {man['downloaded_start']}-{man['downloaded_end']} "
+                f"({man.get('chapter_count', scanned[2])} files)"
+            )
+            return 0
         print(f"Missing PDF: {PDF_PATH.relative_to(ROOT).as_posix()}")
         print("Run scripts/penana_download.py first (requires pdf_url in config).")
         return 1
 
     pdf_hash = sha256_file(PDF_PATH)
     prev = load_manifest()
-    if prev.get("sha256") == pdf_hash and TXT_PATH.is_file() and any(CHAPTERS_DIR.glob("[0-9][0-9][0-9].md")):
+    if (
+        prev.get("sha256") == pdf_hash
+        and TXT_PATH.is_file()
+        and scanned is not None
+        and prev.get("parser_result") == "ok"
+    ):
         print("No changes detected.")
         return 0
 
-    text, meta = pdf_to_text()
+    try:
+        text, meta = pdf_to_text(PDF_PATH)
+    except Exception as exc:  # noqa: BLE001
+        print(f"parser error: {exc}", file=sys.stderr)
+        # Keep PDF for debugging.
+        prev["parser_result"] = "error"
+        if prev:
+            save_manifest(prev)
+        return 1
+
     TXT_PATH.write_text(text, encoding="utf-8")
-    print(f"TXT written: {TXT_PATH.relative_to(ROOT).as_posix()} ({meta['text_length']} chars, {meta['page_count']} pages)")
+    print(
+        f"TXT written: {TXT_PATH.relative_to(ROOT).as_posix()} "
+        f"({meta['text_length']} chars, {meta['page_count']} pages)"
+    )
 
     chapters = split_chapters(text)
+    if not chapters:
+        print("parser error: no chapters detected; keeping PDF.", file=sys.stderr)
+        prev["parser_result"] = "error"
+        if prev:
+            save_manifest(prev)
+        return 1
+
     write_chapters(chapters)
     print(f"chapters written: {len(chapters)} -> {CHAPTERS_DIR.relative_to(ROOT).as_posix()}")
 
-    cfg = {}
-    if STORY_META.is_file():
-        cfg = json.loads(STORY_META.read_text(encoding="utf-8"))
-
-    man = {
-        "story_id": cfg.get("story_id", "216000"),
-        "source_url": cfg.get("story_url", ""),
-        "download_url": cfg.get("pdf_url", ""),
-        "downloaded_at": datetime.now(timezone.utc).isoformat(),
-        "filename": PDF_PATH.name,
-        "file_size": PDF_PATH.stat().st_size,
-        "sha256": pdf_hash,
-        "page_count": meta["page_count"],
-        "text_length": meta["text_length"],
-        "chapter_count": len(chapters),
-    }
+    start = min(n for n, _, _ in chapters)
+    end = max(n for n, _, _ in chapters)
+    man = build_manifest(
+        pdf_hash=pdf_hash,
+        file_size=PDF_PATH.stat().st_size,
+        page_count=meta["page_count"],
+        text_length=meta["text_length"],
+        chapter_count=len(chapters),
+        start=start,
+        end=end,
+        cfg=cfg,
+        parser_result="ok",
+        pdf_removed=prev.get("pdf_removed", False),
+    )
+    # Preserve prior download provenance if re-parsing same file.
+    if prev.get("downloaded_at") and prev.get("sha256") == pdf_hash:
+        man["downloaded_at"] = prev["downloaded_at"]
     save_manifest(man)
     print(f"manifest written: {MANIFEST_PATH.relative_to(ROOT).as_posix()}")
+    print(f"range            : downloaded {start}-{end} ({len(chapters)} chapters), status={man['status']}")
     return 0
 
 
