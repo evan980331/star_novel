@@ -11,6 +11,7 @@ refs, unknown entities, protected dirs. Mock only; never writes fiction.
 """
 from __future__ import annotations
 
+import atexit
 import importlib.util
 import json
 import os
@@ -67,6 +68,9 @@ def cleanup_tmp() -> None:
         except Exception:
             pass
     _TMP.clear()
+
+
+atexit.register(cleanup_tmp)
 
 
 def snapshot(*rel_dirs: str) -> dict[str, tuple[int, float]]:
