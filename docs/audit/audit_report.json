@@ -1,0 +1,208 @@
+{
+  "root": "D:\\小說",
+  "generated_at": "2026-09-23T15:05:53.027877+00:00",
+  "file_count": 18,
+  "files": [
+    {
+      "relative_path": ".gitignore",
+      "extension": "",
+      "size": 192,
+      "modified": "2026-09-23T15:04:13.147007+00:00",
+      "sha256": "cf28c7822d3108c40ea073ccf31dfb054ce7cc51822b7b1be34d18611ec327aa",
+      "readable": false,
+      "notes": [
+        "extension not content-checked"
+      ]
+    },
+    {
+      "relative_path": "AGENTS.md",
+      "extension": ".md",
+      "size": 1246,
+      "modified": "2026-09-23T15:04:11.898710+00:00",
+      "sha256": "2e6d1e70d4aa8eead05cc154ec3773659d4db036639b00b5dd5e53e702e26c94",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 774
+    },
+    {
+      "relative_path": "docs/FILE_AUDIT.md",
+      "extension": ".md",
+      "size": 6344,
+      "modified": "2026-09-23T15:03:56.448530+00:00",
+      "sha256": "7284e5cc02c151ed64a71529a97e5477dce56cf9586b8c943d9644b19bd7eb5c",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 3846
+    },
+    {
+      "relative_path": "novel/editor/consistency.md",
+      "extension": ".md",
+      "size": 972,
+      "modified": "2026-09-23T15:04:05.474265+00:00",
+      "sha256": "8c9f3670cd6c9a6628a4d5e970cbd66de46c78a9cd07b7516603d42c83dd562b",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 530
+    },
+    {
+      "relative_path": "novel/README.md",
+      "extension": ".md",
+      "size": 1218,
+      "modified": "2026-09-23T15:04:00.861397+00:00",
+      "sha256": "ab501216a7886806531ed37ceb85f5e9253b6d07f18707ae70f1c86eaa88c863",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 832
+    },
+    {
+      "relative_path": "novel/source/backup/小說備份-第一、二季.docx",
+      "extension": ".docx",
+      "size": 80342,
+      "modified": "2026-06-21T03:56:42.587043+00:00",
+      "sha256": "e2c3cf06d3601037be031fab811ffef43ee61fa2e5dc0a8c12c613bb759fe3af",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 35910,
+      "extracted_to": "docs/audit/小說備份-第一、二季.txt"
+    },
+    {
+      "relative_path": "novel/source/backup/小說備份-第三、四季.docx",
+      "extension": ".docx",
+      "size": 72735,
+      "modified": "2026-06-21T04:09:07.275920+00:00",
+      "sha256": "39c1d4cc58f2ec5b30354635c0f6427aa80f37ede71828573c7d95923df2bac2",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 34881,
+      "extracted_to": "docs/audit/小說備份-第三、四季.txt"
+    },
+    {
+      "relative_path": "novel/source/backup/尚未登場人物.docx",
+      "extension": ".docx",
+      "size": 16504,
+      "modified": "2026-07-22T15:54:48.346962+00:00",
+      "sha256": "20f40405c1cd547c227485a1e1c72a270864264c1ffcb6e2cb40509d8c1c3daf",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 474,
+      "extracted_to": "docs/audit/尚未登場人物.txt"
+    },
+    {
+      "relative_path": "novel/source/backup/後續安排.docx",
+      "extension": ".docx",
+      "size": 18497,
+      "modified": "2026-09-23T14:56:47.293306+00:00",
+      "sha256": "bd10b94a14ab49c4b77e37f5a979881c218fce233ad2ea39dd949add86fd67d9",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 1419,
+      "extracted_to": "docs/audit/後續安排.txt"
+    },
+    {
+      "relative_path": "novel/source/original/小說封面.png",
+      "extension": ".png",
+      "size": 2928234,
+      "modified": "2026-06-19T18:13:02.658237+00:00",
+      "sha256": "a37f9d8bd32511b013aad0c97c0461f91b6eba67e864107da2abbba0f8c05c8c",
+      "readable": true,
+      "notes": [],
+      "image": {
+        "format": "png",
+        "width": 1060,
+        "height": 1484
+      }
+    },
+    {
+      "relative_path": "novel/source/original/小說封面橫向.png",
+      "extension": ".png",
+      "size": 2959770,
+      "modified": "2026-06-19T18:16:40.950108+00:00",
+      "sha256": "3a3549acba6494ae266b85f74abdbceb518d8ca39aa8d98bec0eb1dce7f6bd28",
+      "readable": true,
+      "notes": [],
+      "image": {
+        "format": "png",
+        "width": 1774,
+        "height": 887
+      }
+    },
+    {
+      "relative_path": "novel/source/original/小說設定.docx",
+      "extension": ".docx",
+      "size": 18866,
+      "modified": "2026-06-21T03:55:10.272207+00:00",
+      "sha256": "69c20ebdb063ccdf69948ce0ed061433a3093d165b4fcd85b527542fb48a6a81",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 1225,
+      "extracted_to": "docs/audit/小說設定.txt"
+    },
+    {
+      "relative_path": "novel/source/original/說好一起當吊車尾-妳神化全開yJS9juj4220.pdf",
+      "extension": ".pdf",
+      "size": 1538552,
+      "modified": "2026-07-15T04:02:24.346221+00:00",
+      "sha256": "92778830a1a561513ed61a05773b4f75e8ebdce45494be70c3d188badc3d99d4",
+      "readable": true,
+      "notes": [],
+      "extracted_chars": 111831,
+      "page_count": 124,
+      "extracted_to": "docs/audit/說好一起當吊車尾-妳神化全開yJS9juj4220_pdf_extract.txt"
+    },
+    {
+      "relative_path": "novel/source/penana/config.json",
+      "extension": ".json",
+      "size": 172,
+      "modified": "2026-09-23T15:04:06.249481+00:00",
+      "sha256": "494acdd45df73aafe67c46626f5a34b02acd9b18ef1cae6e22fe1eccf65d2f3a",
+      "readable": false,
+      "notes": [
+        "extension not content-checked"
+      ]
+    },
+    {
+      "relative_path": "novel/source/penana/manifest.json",
+      "extension": ".json",
+      "size": 205,
+      "modified": "2026-09-23T15:05:00.122847+00:00",
+      "sha256": "0d4ed96bf6e07cd11e0295564dfa65bac96174730cdb59a4d6fd68cd6d50c624",
+      "readable": false,
+      "notes": [
+        "extension not content-checked"
+      ]
+    },
+    {
+      "relative_path": "scripts/parse_novel.py",
+      "extension": ".py",
+      "size": 6787,
+      "modified": "2026-09-23T15:04:58.516855+00:00",
+      "sha256": "08e4daaccb7b87f4737acd608ff41ea34b8377be0f20d268c10184a9d528c674",
+      "readable": false,
+      "notes": [
+        "extension not content-checked"
+      ]
+    },
+    {
+      "relative_path": "scripts/penana_download.py",
+      "extension": ".py",
+      "size": 2750,
+      "modified": "2026-09-23T15:04:48.206999+00:00",
+      "sha256": "98c88a752f3ae4a402716c7e2147db1622b811cb7137377f51c90a19c71aefc9",
+      "readable": false,
+      "notes": [
+        "extension not content-checked"
+      ]
+    },
+    {
+      "relative_path": "scripts/sync_novel.py",
+      "extension": ".py",
+      "size": 999,
+      "modified": "2026-09-23T15:04:59.832189+00:00",
+      "sha256": "b938ffd7def46a0e74d187c4ee876f19bd61297cba0d6d0d3abe593d9150e9ee",
+      "readable": false,
+      "notes": [
+        "extension not content-checked"
+      ]
+    }
+  ]
+}
