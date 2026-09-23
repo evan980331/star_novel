@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NovelEditorContext",
+  "description": "3B Context Engine 輸出格式。Canon / Plot / Review 必須分離；[PROPOSED] 與 [INFERRED] 必須保留原標記，不得輸出成已確定設定。",
+  "type": "object",
+  "required": ["request", "task_type", "story_state", "canon", "plot", "review", "source_trace", "warnings"],
+  "properties": {
+    "request": { "type": "string" },
+    "task_type": {
+      "type": "string",
+      "enum": ["WRITE", "CONTINUE", "ANALYZE", "CHARACTER", "ABILITY", "WORLD", "PLOT", "BATTLE", "UNKNOWN"]
+    },
+    "detected": {
+      "type": "object",
+      "properties": {
+        "entities": { "type": "array", "items": { "type": "string" } },
+        "chapters": { "type": "array", "items": { "type": "integer" } },
+        "continue_next": { "type": ["integer", "null"] }
+      }
+    },
+    "story_state": {
+      "type": "object",
+      "properties": {
+        "summary": { "type": "string" },
+        "last_chapter": { "type": ["object", "null"] },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "canon": {
+      "type": "object",
+      "properties": {
+        "world": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "characters": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "abilities": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "weapons": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "factions": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "locations": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "relationships": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } },
+        "terminology": { "type": "array", "items": { "$ref": "#/definitions/canonItem" } }
+      }
+    },
+    "plot": {
+      "type": "object",
+      "properties": {
+        "current_arc": { "type": "array", "items": { "$ref": "#/definitions/textItem" } },
+        "timeline": { "type": "array", "items": { "$ref": "#/definitions/textItem" } },
+        "foreshadowing": { "type": "array", "items": { "$ref": "#/definitions/textItem" } },
+        "unresolved": { "type": "array", "items": { "$ref": "#/definitions/textItem" } },
+        "future": { "type": "array", "items": { "$ref": "#/definitions/textItem" } },
+        "chapters": { "type": "array", "items": { "$ref": "#/definitions/textItem" } }
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "conflicts": { "type": "array", "items": { "$ref": "#/definitions/conflictItem" } },
+        "proposed": { "type": "array", "items": { "$ref": "#/definitions/flaggedItem" } },
+        "inferred": { "type": "array", "items": { "$ref": "#/definitions/flaggedItem" } },
+        "author_decisions_pending": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "source_trace": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "name", "source"],
+        "properties": {
+          "type": { "type": "string" },
+          "name": { "type": "string" },
+          "source": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "definitions": {
+    "canonItem": {
+      "type": "object",
+      "required": ["name", "text", "source", "relevance", "status"],
+      "properties": {
+        "name": { "type": "string" },
+        "text": { "type": "string" },
+        "source": { "type": "array", "items": { "type": "string" } },
+        "relevance": { "type": "string", "enum": ["high", "medium", "low"] },
+        "status": { "type": "string", "enum": ["CANON", "PROPOSED", "INFERRED", "CONFLICT"] }
+      }
+    },
+    "textItem": {
+      "type": "object",
+      "required": ["name", "text", "source", "relevance"],
+      "properties": {
+        "name": { "type": "string" },
+        "text": { "type": "string" },
+        "source": { "type": "array", "items": { "type": "string" } },
+        "relevance": { "type": "string", "enum": ["high", "medium", "low"] }
+      }
+    },
+    "conflictItem": {
+      "type": "object",
+      "required": ["id", "title", "status", "sources"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "status": { "type": "string" },
+        "sources": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "flaggedItem": {
+      "type": "object",
+      "required": ["id", "title", "status", "source"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "status": { "type": "string", "enum": ["PROPOSED", "INFERRED"] },
+        "confidence": { "type": "string" },
+        "source": { "type": "array", "items": { "type": "string" } },
+        "reason": { "type": "string" },
+        "relevance": { "type": "string", "enum": ["high", "medium", "low"] }
+      }
+    }
+  }
+}
