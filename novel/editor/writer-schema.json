@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NovelWriterDraft",
+  "description": "3C Writer Agent 草稿格式。草稿只能寫入 novel/drafts/，不得寫入 chapters/canon；新設定以 [NEW_SETTING] 標記，待作者確認。",
+  "type": "object",
+  "required": ["draft_id", "target", "request", "request_type", "status", "content", "needs_author_decision", "warnings", "conflicts_used", "proposed_used", "inferred_used", "source_chapters", "source_trace"],
+  "properties": {
+    "draft_id": { "type": "string" },
+    "target": { "type": "string" },
+    "request": { "type": "string" },
+    "request_type": { "type": "string" },
+    "status": { "type": "string", "enum": ["DRAFT"] },
+    "canon_version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "content": { "type": "string" },
+    "needs_author_decision": { "type": "boolean" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "conflicts_used": { "type": "array", "items": { "type": "string" } },
+    "proposed_used": { "type": "array", "items": { "type": "string" } },
+    "inferred_used": { "type": "array", "items": { "type": "string" } },
+    "entities_used": { "type": "array", "items": { "type": "string" } },
+    "new_settings": { "type": "array", "items": { "type": "string" } },
+    "source_chapters": { "type": "array", "items": { "type": "string" } },
+    "source_trace": { "type": "array", "items": { "type": "object" } }
+  }
+}

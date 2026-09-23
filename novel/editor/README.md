@@ -23,3 +23,42 @@ python novel/editor/context_builder.py --request "分析星星目前能力" --fo
 
 輸出為 JSON（預設）或 Markdown（`--format markdown`），僅為 Context，
 可直接提供給未來的 Writer Agent 使用。
+
+## Writer Agent（3C）
+
+```text
+User
+ ↓
+writer.py
+ ↓
+context_builder.py
+ ↓
+Context
+ ↓
+WriterProvider
+ ↓
+Draft
+ ↓
+draft-validator.py
+ ↓
+Validation Report
+ ↓
+novel/drafts/
+```
+
+| 檔案 | 用途 |
+|------|------|
+| `writer.py` | Writer Agent CLI（經 Context Builder，不可繞過） |
+| `writer-schema.json` | Draft JSON Schema |
+| `writer-prompt.md` | Writer 系統提示詞（含 Canon 規則與禁令） |
+| `draft-validator.py` | Draft Validator（唯讀，產出 Validation Report） |
+
+Provider 介面 `WriterProvider.generate(context, instruction)`；
+`mock` 用於測試（只產出 `[MOCK DRAFT]`），`openai-compatible` 經環境變數
+（`LLM_PROVIDER`／`LLM_BASE_URL`／`LLM_MODEL`／`LLM_API_KEY`）設定，
+未設定時明確回報而不 crash。草稿只能寫入 `novel/drafts/`。
+
+```bash
+python novel/editor/writer.py --request "續寫第60章" --provider mock
+python novel/editor/draft-validator.py novel/drafts/chapter-060-001.md
+```

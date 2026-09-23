@@ -507,6 +507,7 @@ def retrieve_review(detected_names: list[str], task_type: str) -> dict:
                     "id": it["id"], "title": it["title"] or it["id"],
                     "status": status,
                     "sources": ["novel/review/conflicts.md"],
+                    "excerpt": it["text"][:300],
                 })
     for it in parse_review_items("proposed.md", "P"):
         text = it["id"] + it["title"] + it["text"]
