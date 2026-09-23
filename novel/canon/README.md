@@ -136,6 +136,56 @@ Source: 小說備份-第一季.docx + 小說備份-第二季.docx   ← 多份�
 
 ---
 
+## Canon 安全規則（第 3A 階段）
+
+```text
+CANON
+= 已由正文或作者確認的正式設定
+
+[INFERRED]
+= AI/分析根據正文推導，但不是正式 Canon
+
+[PROPOSED]
+= 未經作者確認的未來設定
+
+[AI IDEA]
+= AI 自行產生的創作構想
+
+[CONFLICT]
+= 不同來源存在無法直接消解的設定差異
+```
+
+優先級：
+
+```text
+作者明確指示
+>
+作者確認 Canon
+>
+正式正文
+>
+確認設定
+>
+[INFERRED]
+>
+[PROPOSED]
+>
+[AI IDEA]
+```
+
+禁止：
+
+```text
+[PROPOSED] → 自動變成 CANON
+[INFERRED] → 自動變成 CANON
+[AI IDEA] → 自動變成 CANON
+```
+
+只有作者明確確認後才能升級。所有未確認內容追蹤於 `novel/review/`，
+作者確認入口為 `novel/review/author-decisions.md`。
+
+---
+
 ## 原始資料不可修改（警語）
 
 ⚠️ **絕對禁止修改以下目錄中的任何檔案**：

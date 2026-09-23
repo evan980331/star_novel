@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "last_audit": "2026-09-24",
+  "conflicts": {
+    "total": 4,
+    "unresolved": 4,
+    "resolved": 0
+  },
+  "proposed": {
+    "total": 42,
+    "accepted": 0,
+    "rejected": 0,
+    "pending": 42
+  },
+  "inferred": {
+    "total": 30,
+    "high": 8,
+    "medium": 10,
+    "low": 12
+  },
+  "author_decisions_pending": 12
+}
