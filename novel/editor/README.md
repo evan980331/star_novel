@@ -62,3 +62,32 @@ Provider 介面 `WriterProvider.generate(context, instruction)`；
 python novel/editor/writer.py --request "續寫第60章" --provider mock
 python novel/editor/draft-validator.py novel/drafts/chapter-060-001.md
 ```
+
+## 3D Consistency / Quality Gate
+
+```text
+Writer 負責產生 Draft
+Validator 負責格式與基本結構
+Consistency Checker 負責 Canon / Plot / Review 一致性
+作者負責最終確認
+```
+
+```bash
+python novel/editor/consistency_checker.py novel/drafts/chapter-060-v1.md --json
+python novel/editor/consistency_checker.py novel/drafts/chapter-060-v1.md --markdown
+python novel/editor/writer.py --request "續寫第60章" --provider mock \
+  --output novel/drafts/chapter-060-v1.md --consistency
+```
+
+明確聲明：
+
+```text
+Consistency PASS ≠ 文學品質保證
+Consistency PASS ≠ Canon 自動採用
+Consistency WARNING ≠ 一定錯誤
+Consistency ERROR = 發現明確或高度可確定的規則違反
+```
+
+Checker 只能檢查與報告（JSON／Markdown Report），不得修改 Canon、
+正式章節、Draft，不得採用設定、不得解 Conflict。規則見
+`consistency-rules.md`，報告格式見 `consistency-schema.json`。

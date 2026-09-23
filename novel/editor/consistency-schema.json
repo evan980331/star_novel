@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConsistencyReport",
+  "description": "3D Consistency / Quality Gate 報告格式。Checker 只能檢查與報告，不得修改 Canon、章節、Draft；WARNING 不等於錯誤，ERROR 才是明確或高度可確定的規則違反。",
+  "type": "object",
+  "required": ["schema_version", "draft", "canon_version", "status", "summary", "checks", "issues", "protected_files"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "draft": {
+      "type": "object",
+      "required": ["path", "chapter", "version"],
+      "properties": {
+        "path": { "type": "string" },
+        "chapter": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "canon_version": { "type": "string" },
+    "status": { "type": "string", "enum": ["PASS", "WARNING", "ERROR"] },
+    "summary": {
+      "type": "object",
+      "required": ["errors", "warnings", "info"],
+      "properties": {
+        "errors": { "type": "integer" },
+        "warnings": { "type": "integer" },
+        "info": { "type": "integer" }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "result"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "result": { "type": "string", "enum": ["PASS", "WARNING", "ERROR", "INFO", "SKIP"] }
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "category", "message", "evidence", "source", "recommendation"],
+        "properties": {
+          "id": { "type": "string" },
+          "severity": { "type": "string", "enum": ["ERROR", "WARNING", "INFO"] },
+          "category": { "type": "string" },
+          "message": { "type": "string" },
+          "evidence": { "type": "string" },
+          "source": { "type": "string" },
+          "recommendation": { "type": "string" }
+        }
+      }
+    },
+    "protected_files": {
+      "type": "object",
+      "required": ["modified"],
+      "properties": {
+        "modified": { "type": "boolean" },
+        "details": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

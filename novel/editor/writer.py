@@ -351,6 +351,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--output", default="")
     ap.add_argument("--provider", default=os.environ.get("LLM_PROVIDER", "mock"))
     ap.add_argument("--max-items", type=int, default=40)
+    ap.add_argument("--consistency", action="store_true",
+                    help="run draft-validator + consistency checker after writing")
     args = ap.parse_args(argv)
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -371,9 +373,45 @@ def main(argv: list[str] | None = None) -> int:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(text, encoding="utf-8")
         print(f"draft written: {out.relative_to(ROOT).as_posix()}")
+        if args.consistency:
+            run_consistency_gate(out)
     else:
+        if args.consistency:
+            print("--consistency requires --output; skipping gate.")
         sys.stdout.write(text)
     return 0
+
+
+def run_consistency_gate(draft_path: Path) -> int:
+    """Optional post pipeline: validator -> consistency checker -> reports."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "dv_gate", EDITOR_DIR / "draft-validator.py")
+    assert spec and spec.loader
+    dv = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(dv)
+    spec2 = importlib.util.spec_from_file_location(
+        "cc_gate", EDITOR_DIR / "consistency_checker.py")
+    assert spec2 and spec2.loader
+    cc = importlib.util.module_from_spec(spec2)
+    spec2.loader.exec_module(cc)
+    fails, warns, new, _ = dv.validate(draft_path)
+    print(f"validator: {len(fails)} failures, {len(warns)} warnings, "
+          f"{len(new)} new settings")
+    rep = cc.Checker(draft_path, None).run(cc.snapshot())
+    stem = draft_path.with_suffix("")
+    json_path = stem.parent / (stem.name + "-consistency.json")
+    md_path = stem.parent / (stem.name + "-consistency.md")
+    clean = json.loads(re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "",
+                              json.dumps(rep, ensure_ascii=False)))
+    json_path.write_text(json.dumps(clean, ensure_ascii=False, indent=2) + "\n",
+                         encoding="utf-8")
+    md_path.write_text(cc.to_markdown(clean), encoding="utf-8")
+    print(f"consistency: {clean['status']} "
+          f"(E{clean['summary']['errors']} W{clean['summary']['warnings']} "
+          f"I{clean['summary']['info']})")
+    print(f"reports: {json_path.name}, {md_path.name}")
+    return 0 if clean["status"] != "ERROR" else 1
 
 
 if __name__ == "__main__":
